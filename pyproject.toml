@@ -1,0 +1,11 @@
+[project]
+authors = [
+    {name = "Ojas Mishra", email = "ojm15@pitt.edu"}
+]
+readme = "README.md"
+name = "detect_sparse_lang"
+version = "0.0.1"
+dependencies = [
+    "lxml",
+    "langid",
+]
