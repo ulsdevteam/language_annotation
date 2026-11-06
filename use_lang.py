@@ -99,6 +99,8 @@ class UnclearSpanCollection:
             else:
                 i += 1
 
+    def serialize(self):
+        return " ".join(x.serialize() for x in self.offsets)
 input_file = "export.xml"
 output_file = "export.out.xml"
 def sliding_window(iterable, n):
@@ -113,6 +115,16 @@ def sliding_window(iterable, n):
 tree = lxml.etree.parse(input_file)
 
 
+def update_element(element, span_collection):
+    props = element.get("custom")
+    start_index = props.find("unclear")
+    if start_index == -1:
+        props += span_collection.serialize()
+    else:
+        props = props[:start_index] + span_collection.serialize()
+
+    text_element.set("custom", props)
+    
 
 #print(tree)
 
@@ -182,9 +194,9 @@ for text_element in textlines:
 
     for offset in collection.offsets:
         print(offset.serialize(), offset)
-
+    update_element(text_element, collection)
     #custom_str = text_element.get("custom")
     #text_element.set("custom", custom_str + output_str)
     #print(output_str)
 
-#tree.write(output_file)
+tree.write(output_file)
